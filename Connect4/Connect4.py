@@ -3,9 +3,10 @@ import re
 
 class Connect4:
     def __init__(self):
-        self.grid = list(("O" * 7+".") * 6)
+        self.grid = list(("O" * 7 + ".") * 6)
         self.player = "R"
         self.gameOn = True
+        self.rounds = 0
 
     def _Changeplayer(self):
         if self.player == "R":
@@ -23,14 +24,18 @@ class Connect4:
                     move += 8
                 else:
                     self.grid[move] = self.player
-                    self._check_win_status()
+                    self.rounds += 1
+                    self._checkWinStatus()
                     self._Changeplayer()
                     break
             except:
                 print("Move out of range")
                 break
+        if self.rounds == 42:
+            self.gameOn = False
+            print("Draw no one won")
 
-    def _check_win_status(self):
+    def _checkWinStatus(self):
         p1 = self.player * 4
         p3 = self.player + ".{7}" + self.player + ".{7}" + self.player + ".{7}" + self.player
         c1 = re.search(p1, "".join(self.grid))
@@ -57,17 +62,18 @@ class Connect4:
                 g.append(self.grid[i])
                 j += 1
                 i += 1
-        for i in range(1, len(tempGrid)+1):
+        for i in range(1, len(tempGrid) + 1):
             print(tempGrid[-i])
+
 
 s = Connect4()
 # s.printBoard()
 import random
+
 for _ in range(int(input())):
     while s.gameOn:
-        m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.player)))
-        # m = random.randint(0, 6)
+        # m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.player)))
+        m = random.randint(0, 6)
         s.make_move(m)
-        s.printBoard()
+    s.printBoard()
     s = Connect4()
-
