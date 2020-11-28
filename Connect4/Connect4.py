@@ -37,7 +37,7 @@ class Connect4:
 
     def _checkWinStatus(self):
         p1 = self.player * 4
-        p3 = self.player + ".{7}" + self.player + ".{7}" + self.player + ".{7}" + self.player
+        p3 = self.player + ".{8}" + self.player + ".{8}" + self.player + ".{8}" + self.player
         c1 = re.search(p1, "".join(self.grid))
         c3 = re.search(p3, "".join(self.grid))
         if c1 or c3:
@@ -75,5 +75,5 @@ for _ in range(int(input())):
         # m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.player)))
         m = random.randint(0, 6)
         s.make_move(m)
-    s.printBoard()
+    # s.printBoard()
     s = Connect4()
