@@ -9,13 +9,13 @@ class Connect4:
         self.gameOn = True
         self.rounds = 0
 
-    def _ChangePlayer(self):
+    def __changePlayer(self):
         if self.playerTurn == "R":
             self.playerTurn = "Y"
         else:
             self.playerTurn = "R"
 
-    def _return_move_place(self, move):
+    def __returnMovePlace(self, move):
         if move > 7:
             print("Move out of range")
             return None
@@ -27,19 +27,20 @@ class Connect4:
         except IndexError:
             print("Move out of range")
             return None
+
     def make_move(self, move):
-        movePlace = self._return_move_place(move)
-        if movePlace != None:
+        movePlace = self.__returnMovePlace(move)
+        if movePlace is not None:
             self.gridMutable[movePlace] = self.playerTurn
             self.grid = "".join(self.gridMutable)
             self.rounds += 1
-            self._checkWinStatus()
-            self._ChangePlayer()
+            self.__checkWinStatus()
+            self.__changePlayer()
         if self.rounds == 42:
             self.gameOn = False
             print("Draw no one won")
 
-    def _checkWinStatus(self):
+    def __checkWinStatus(self):
         p1 = self.playerTurn * 4
         p2 = self.playerTurn + ".{7}" + self.playerTurn + ".{7}" + self.playerTurn + ".{7}" + self.playerTurn
         p3 = self.playerTurn + ".{6}" + self.playerTurn + ".{6}" + self.playerTurn + ".{6}" + self.playerTurn
@@ -62,7 +63,6 @@ class Connect4:
 s = Connect4()
 # s.printBoard()
 import random
-
 for _ in range(int(input())):
     while s.gameOn:
         # m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.playerTurn)))

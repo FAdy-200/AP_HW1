@@ -12,7 +12,7 @@ class Rock_Paper_Scissors:
         self.order = {"Rock": "Scissors", "Paper": "Rock", "Scissors": "Paper"}
         self.gameOn = True
 
-    def _getRoundWinner(self):
+    def __getRoundWinner(self):
         if self.order[self.humanChoice] == self.aiChoice:
             self.humanWins += 1
             self.roundsPlayed += 1
@@ -36,16 +36,15 @@ class Rock_Paper_Scissors:
         else:
             return
 
-    def _getAiChoice(self):
+    def __getAiChoice(self):
         d = {0: "Scissors", 1: "Rock", 2: "Paper"}
         x = random.randint(0, 2)
-        # x = 0
         self.aiChoice = d[x]
 
     def playAround(self, choice):
         self.humanChoice = choice
-        self._getAiChoice()
-        w = self._getRoundWinner()
+        self.__getAiChoice()
+        w = self.__getRoundWinner()
         if w != "Draw":
             print("Computer choose {}".format(self.aiChoice))
             print("{} has won this round".format(w))
