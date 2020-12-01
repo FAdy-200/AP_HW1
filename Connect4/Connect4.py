@@ -60,13 +60,14 @@ class Connect4:
             print(i[::-1])
 
 
-s = Connect4()
-# s.printBoard()
-import random
-for _ in range(int(input())):
-    while s.gameOn:
-        # m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.playerTurn)))
-        m = random.randint(0, 6)
-        s.make_move(m)
-    s.printBoard()
-    s = Connect4()
+# s = Connect4()
+# print(s)
+# # s.printBoard()
+# import random
+# for _ in range(int(input())):
+#     while s.gameOn:
+#         m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.playerTurn)))
+#         # m = random.randint(0, 6)
+#         s.make_move(m)
+#         s.printBoard()
+#     s = Connect4()
