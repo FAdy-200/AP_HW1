@@ -68,17 +68,3 @@ class Connect4:
         print()
         for i in grid:
             print(i)
-
-
-# s = Connect4()
-# # s.printBoard()
-# import random
-#
-# for _ in range(int(input())):
-#     while s.gameOn:
-#         m = int(
-#             input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.playerTurn)))
-#         # m = random.randint(0, 6)
-#         s.makeMove(m)
-#         s.printBoard()
-#     s = Connect4()
