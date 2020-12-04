@@ -50,10 +50,10 @@ class Rock_Paper_Scissors:
     def play_a_round(self, choice):
         self.humanChoice = choice
         self.__get_computer_choice()
-        w = self.get_round_winner()
-        if w != "Draw":
+        self.get_round_winner()
+        if self.lastRoundWinner != "Draw":
             print("Computer choose {}".format(self.aiChoice))
-            print("{} has won this round".format(w))
+            print("{} has won this round".format(self.lastRoundWinner))
         else:
             print("it was a draw the round will be counted form the total game played")
         self.get_game_winner()

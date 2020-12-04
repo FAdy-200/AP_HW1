@@ -11,12 +11,12 @@ class RockPaperScissorsGUI:
         self.black = 0, 0, 0
         self.screen = pygame.display.set_mode(self.size)
         self.font = pygame.font.Font('freesansbold.ttf', 20)
-        self.paperBig = pygame.image.load("Paper 1.png")
-        self.paperSmall = pygame.image.load("Paper 2.png")
-        self.rockBig = pygame.image.load("Rock 1.png")
-        self.rockSmall = pygame.image.load("Rock 2.png")
-        self.scissorsBig = pygame.image.load("Scissors 1.png")
-        self.scissorsSmall = pygame.image.load("Scissors 2.png")
+        self.paperBig = pygame.image.load("Rock_Paper_Scissors_GUI\Paper 1.png")
+        self.paperSmall = pygame.image.load("Rock_Paper_Scissors_GUI\Paper 2.png")
+        self.rockBig = pygame.image.load("Rock_Paper_Scissors_GUI\Rock 1.png")
+        self.rockSmall = pygame.image.load("Rock_Paper_Scissors_GUI\Rock 2.png")
+        self.scissorsBig = pygame.image.load("Rock_Paper_Scissors_GUI\Scissors 1.png")
+        self.scissorsSmall = pygame.image.load("Rock_Paper_Scissors_GUI\Scissors 2.png")
         self.startScreenText = self.font.render("Please enter the number of rounds you want to play", True, self.black)
         self.translatingDictionary = {"Rock": self.rockBig, "Scissors": self.scissorsBig, "Paper": self.paperBig,
                                       None: self.font.render("", True, self.white)}
@@ -29,7 +29,6 @@ class RockPaperScissorsGUI:
         if event.type == pygame.KEYDOWN:
             if event.key != pygame.K_RETURN:
                 self.numberOfRounds += event.unicode
-                print(self.numberOfRounds)
             else:
                 try:
                     self.numberOfRounds = int(self.numberOfRounds)
@@ -48,7 +47,6 @@ class RockPaperScissorsGUI:
             if 650 > self.mouse[1] > 420:
                 if 200 > self.mouse[0] > 100:
                     self.game.play_a_round("Rock")
-                    print("22555")
                 elif 400 > self.mouse[0] > 300:
                     self.game.play_a_round("Paper")
                 elif 600 > self.mouse[0] > 500:
@@ -60,7 +58,7 @@ class RockPaperScissorsGUI:
                 sys.exit()
             if not self.gameModeFlag:
                 self._set_number_of_rounds(event)
-            else:
+            elif self.game.gameOn:
                 self._set_user_input(event)
 
     def _center_text(self, text, mode=None):
@@ -71,6 +69,8 @@ class RockPaperScissorsGUI:
             tr.center = self.width / 2, 100
         elif mode == "Pre Game":
             tr.center = self.width / 2, self.height / 2 + 100
+        elif mode == "Draw":
+            tr.center = self.width / 2, self.height / 2 + 120
         return tr
 
     def _draw_player_choices(self):
@@ -92,9 +92,12 @@ class RockPaperScissorsGUI:
             tr = self._center_text(t, "Pre Game")
             self.screen.blit(t, tr)
         elif winnerOfRound == "Draw":
-            t = self.font.render(winnerOfRound + " no one has won this round", True, self.black)
-            tr = self._center_text(t, "Pre Game")
-            self.screen.blit(t, tr)
+            t1 = self.font.render(winnerOfRound + " no one has won this round", True, self.black)
+            t1r = self._center_text(t1, "Pre Game")
+            t2 = self.font.render(" but it will be counted as a played round", True, self.black)
+            t2r = self._center_text(t2, "Draw")
+            self.screen.blit(t1, t1r)
+            self.screen.blit(t2, t2r)
 
     def _draw_game_winner(self):
         winnerOfGame = self.game.get_game_winner()
@@ -115,7 +118,7 @@ class RockPaperScissorsGUI:
         text = [font.render(nrl, True, self.black), font.render(nrh, True, self.black),
                 font.render(nrc, True, self.black)]
         for i in range(len(text)):
-            self.screen.blit(text[i], (0, 10*i))
+            self.screen.blit(text[i], (0, 10 * i))
 
     def _pre_game_screen(self):
         tr = self._center_text(self.startScreenText)
@@ -142,6 +145,4 @@ class RockPaperScissorsGUI:
                     self._draw_game_statistics()
             else:
                 self._pre_game_screen()
-            print(self.mouse)
             pygame.display.flip()
-
