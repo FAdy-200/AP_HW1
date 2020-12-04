@@ -42,14 +42,14 @@ class Rock_Paper_Scissors:
             self.gameOn = False
             return "Draw"
 
-    def __get_computer_choice(self):
+    def _get_computer_choice(self):
         d = {0: "Scissors", 1: "Rock", 2: "Paper"}
         x = random.randint(0, 2)
         self.aiChoice = d[x]
 
     def play_a_round(self, choice):
         self.humanChoice = choice
-        self.__get_computer_choice()
+        self._get_computer_choice()
         self.get_round_winner()
         if self.lastRoundWinner != "Draw":
             print("Computer choose {}".format(self.aiChoice))
