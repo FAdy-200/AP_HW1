@@ -1,77 +1,92 @@
 import pygame
 import sys
-from Connect4.Connect4 import Connect4
-import random
-s = Connect4()
-pygame.init()
+from Connect4_GUI.Connect4 import Connect4
 
-size = width, height = 672, 622
-white = 254, 254, 254
 
-screen = pygame.display.set_mode(size)
+class connect4GUI:
+    def __init__(self):
+        pygame.init()
+        self.size = self.width, self.height = 672, 622
+        self.white = 254, 254, 254
+        self.black_color = 0, 0, 0
+        self.screen = pygame.display.set_mode(self.size)
+        self.font = pygame.font.Font('freesansbold.ttf', 20)
+        self.mouse = pygame.mouse.get_pos()
+        self.game = Connect4()
+        self.background = pygame.image.load("Connect4_GUI\Connect_4_Background.png")
+        self.red = pygame.image.load("Connect4_GUI\R2.png")
+        self.black = pygame.image.load("Connect4_GUI\B2.png")
+        self.font = pygame.font.Font('freesansbold.ttf', 32)
+        self.saveCheck = False
+        self.lastScreen = None
+        self.translatingDictionary = {"R": self.red, "B": self.black}
 
-background = pygame.image.load("Connect_4_Background.png")
-red = pygame.image.load("R2.png")
-black = pygame.image.load("B2.png")
-font = pygame.font.Font('freesansbold.ttf', 32)
-save = 0
-d = {"R": red, "B": black}
-while 1:
+    def _check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif self.game.gameOn:
+                self._set_user_input(event)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-        if event.type == pygame.MOUSEBUTTONDOWN and s.gameOn:
-            if mouse[0] < 100:
-                s.makeMove(0)
-            elif mouse[0] < 200:
-                s.makeMove(1)
-            elif mouse[0] < 300:
-                s.makeMove(2)
-            elif mouse[0] < 400:
-                s.makeMove(3)
-            elif mouse[0] < 500:
-                s.makeMove(4)
-            elif mouse[0] < 600:
-                s.makeMove(5)
-            elif mouse[0] < 700:
-                s.makeMove(6)
+    def _set_user_input(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.mouse[0] < 100:
+                self.game.makeMove(0)
+            elif self.mouse[0] < 200:
+                self.game.makeMove(1)
+            elif self.mouse[0] < 300:
+                self.game.makeMove(2)
+            elif self.mouse[0] < 400:
+                self.game.makeMove(3)
+            elif self.mouse[0] < 500:
+                self.game.makeMove(4)
+            elif self.mouse[0] < 600:
+                self.game.makeMove(5)
+            elif self.mouse[0] < 700:
+                self.game.makeMove(6)
             print()
-            for i in s.getBoard():
+            for i in self.game.getBoard():
                 print(i)
-    if s.gameOn:
-        s.makeMove(random.randint(0, 6))
-        mouse = pygame.mouse.get_pos()
-        screen.fill(white)
-        screen.blit(background, (0, 0))
-        sg = s.getBoard()
+
+    def _draw_board(self):
+
+        sg = self.game.getBoard()
         for i in range(6):
             for j in range(7):
                 if sg[i][j] != "O":
-                    screen.blit(d[sg[i][j]], (11 + 95.5 * j, 20 + 93 * i))
-    else:
-        if save == 0:
-            sg = s.getBoard()
-            for i in range(6):
-                for j in range(7):
-                    if sg[i][j] != "O":
-                        screen.blit(d[sg[i][j]], (11 + 95.5 * j, 20 + 93 * i))
-            pygame.image.save(screen, "last.png")
-            save = 1
-        screen.fill(white)
-        image = pygame.image.load("last.png")
-        image.set_alpha(100)
-        screen.blit(image, (0, 0))
-        if s.winner is not None:
-            screen.blit(d[s.winner], ((width / 2) - 38, height / 2))
-            text = font.render('Has won the game', True, (0, 0, 0))
-            textrect = text.get_rect()
-            textrect.center = (width / 2, (height / 2) + 100)
-            screen.blit(text, textrect)
-        else:
-            text = font.render('Draw no one won', True, (0, 0, 0))
-            textrect = text.get_rect()
-            textrect.center = (width / 2, (height / 2))
-            screen.blit(text, textrect)
-        s=Connect4()
-    pygame.display.flip()
+                    self.screen.blit(self.translatingDictionary[sg[i][j]], (11 + 95.5 * j, 20 + 93 * i))
+
+    def _play_a_round(self):
+        self.mouse = pygame.mouse.get_pos()
+        self.screen.fill(self.white)
+        self.screen.blit(self.background,(0,0))
+        self._draw_board()
+
+    def _winner_screen(self):
+        self.screen.fill(self.white)
+        self.lastScreen = pygame.image.load("Connect4_GUI\last.png")
+        self.lastScreen.set_alpha(100)
+        self.screen.blit(self.lastScreen, (0, 0))
+        t = self.font.render('Draw no one won', True, (0, 0, 0))
+        tr = t.get_rect()
+        tr.center = (self.width / 2, (self.height / 2))
+        if self.game.winner is not None:
+            self.screen.blit(self.translatingDictionary[self.game.winner], (self.width / 2 - 38, self.height / 2))
+            t = self.font.render('Has won the game', True, (0, 0, 0))
+            tr = t.get_rect()
+            tr.center = (self.width / 2, (self.height / 2) + 100)
+
+        self.screen.blit(t, tr)
+
+    def start_playing(self):
+        while True:
+            self._check_events()
+            if self.game.gameOn:
+                self._play_a_round()
+            else:
+                if not self.saveCheck:
+                    self._draw_board()
+                    pygame.image.save(self.screen, "Connect4_GUI\last.png")
+                    self.saveCheck = True
+                self._winner_screen()
+            pygame.display.flip()

@@ -57,11 +57,3 @@ class Rock_Paper_Scissors:
         else:
             print("it was a draw the round will be counted form the total game played")
         self.get_game_winner()
-
-# d = {0: "Scissors", 1: "Rock", 2: "Paper"}
-# n = int(input())
-# # n = 100000
-# r = Rock_Paper_Scissors(n)
-# while r.gameOn:
-# #     r.playAround(d[random.randint(0, 2)])
-#     r.playAround(d[int(input())])

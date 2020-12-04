@@ -1,6 +1,6 @@
 import pygame
 import sys
-from Rock_Paper_Scissors.Rock_Paper_Scissors import Rock_Paper_Scissors
+from Rock_Paper_Scissors_GUI.Rock_Paper_Scissors import Rock_Paper_Scissors
 
 
 class RockPaperScissorsGUI:
