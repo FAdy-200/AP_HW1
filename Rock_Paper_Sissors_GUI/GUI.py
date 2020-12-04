@@ -2,68 +2,146 @@ import pygame
 import sys
 from Rock_Paper_Scissors.Rock_Paper_Scissors import Rock_Paper_Scissors
 
-pygame.init()
-size = width, height = 672, 622
-grey = 254, 254, 254
-r = Rock_Paper_Scissors(1)
-screen = pygame.display.set_mode(size)
-font = pygame.font.Font('freesansbold.ttf', 20)
-paperBig = pygame.image.load("Paper 1.png")
-paperSmall = pygame.image.load("Paper 2.png")
-rockBig = pygame.image.load("Rock 1.png")
-rockSmall = pygame.image.load("Rock 2.png")
-scissorsBig = pygame.image.load("Scissors 1.png")
-scissorsSmall = pygame.image.load("Scissors 2.png")
-text1 = font.render("Please enter the number of rounds you want to play", True, (0, 0, 0))
-i = False
-n = ""
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-        if not i:
-            if event.type == pygame.KEYDOWN:
-                if event.key != pygame.K_RETURN:
-                    n += event.unicode
-                    print(n)
+
+class RockPaperScissorsGUI:
+    def __init__(self):
+        pygame.init()
+        self.size = self.width, self.height = 672, 622
+        self.white = 254, 254, 254
+        self.black = 0, 0, 0
+        self.screen = pygame.display.set_mode(self.size)
+        self.font = pygame.font.Font('freesansbold.ttf', 20)
+        self.paperBig = pygame.image.load("Paper 1.png")
+        self.paperSmall = pygame.image.load("Paper 2.png")
+        self.rockBig = pygame.image.load("Rock 1.png")
+        self.rockSmall = pygame.image.load("Rock 2.png")
+        self.scissorsBig = pygame.image.load("Scissors 1.png")
+        self.scissorsSmall = pygame.image.load("Scissors 2.png")
+        self.startScreenText = self.font.render("Please enter the number of rounds you want to play", True, self.black)
+        self.translatingDictionary = {"Rock": self.rockBig, "Scissors": self.scissorsBig, "Paper": self.paperBig,
+                                      None: self.font.render("", True, self.white)}
+        self.mouse = pygame.mouse.get_pos()
+        self.gameModeFlag = False
+        self.numberOfRounds = ""
+        self.game = None
+
+    def _set_number_of_rounds(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key != pygame.K_RETURN:
+                self.numberOfRounds += event.unicode
+                print(self.numberOfRounds)
+            else:
+                try:
+                    self.numberOfRounds = int(self.numberOfRounds)
+                    self.gameModeFlag = True
+                    self.game = Rock_Paper_Scissors(self.numberOfRounds)
+                    return True
+                except:
+                    self.numberOfRounds = ""
+                    self.startScreenText = self.font.render(
+                        "The input format were wrong please reenter the number of rounds",
+                        True,
+                        self.black)
+
+    def _set_user_input(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if 650 > self.mouse[1] > 420:
+                if 200 > self.mouse[0] > 100:
+                    self.game.play_a_round("Rock")
+                    print("22555")
+                elif 400 > self.mouse[0] > 300:
+                    self.game.play_a_round("Paper")
+                elif 600 > self.mouse[0] > 500:
+                    self.game.play_a_round("Scissors")
+
+    def _check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if not self.gameModeFlag:
+                self._set_number_of_rounds(event)
+            else:
+                self._set_user_input(event)
+
+    def _center_text(self, text, mode=None):
+        tr = text.get_rect()
+        if mode is None:
+            tr.center = self.width / 2, self.height / 2
+        elif mode == "Computer Choice":
+            tr.center = self.width / 2, 100
+        elif mode == "Pre Game":
+            tr.center = self.width / 2, self.height / 2 + 100
+        return tr
+
+    def _draw_player_choices(self):
+        self.screen.blit(self.rockSmall, (100, 460))
+        self.screen.blit(self.scissorsSmall, (500, 460))
+        self.screen.blit(self.paperSmall, (300, 460))
+
+    def _draw_computer_choice(self):
+        aic = self.game.aiChoice
+        self.screen.blit(self.translatingDictionary[aic], (self.width / 2 - 100, 150))
+        t = self.font.render("The computer choose:", True, self.black)
+        tr = self._center_text(t, "Computer Choice")
+        self.screen.blit(t, tr)
+
+    def _draw_round_winner(self):
+        winnerOfRound = self.game.lastRoundWinner
+        if winnerOfRound == "Human" or winnerOfRound == "Computer":
+            t = self.font.render(winnerOfRound + " has won this round", True, self.black)
+            tr = self._center_text(t, "Pre Game")
+            self.screen.blit(t, tr)
+        elif winnerOfRound == "Draw":
+            t = self.font.render(winnerOfRound + " no one has won this round", True, self.black)
+            tr = self._center_text(t, "Pre Game")
+            self.screen.blit(t, tr)
+
+    def _draw_game_winner(self):
+        winnerOfGame = self.game.get_game_winner()
+        if winnerOfGame != "Draw":
+            t = self.font.render(winnerOfGame + " has won the game", True, self.black)
+            tr = self._center_text(t, "Pre Game")
+            self.screen.blit(t, tr)
+        else:
+            t = self.font.render(winnerOfGame + " no one has won this game", True, self.black)
+            tr = self._center_text(t, "Pre Game")
+            self.screen.blit(t, tr)
+
+    def _draw_game_statistics(self):
+        font = pygame.font.Font('freesansbold.ttf', 10)
+        nrl = "Number of rounds left : {}".format(self.game.roundsLeft)
+        nrh = "Number of rounds Human won : {}".format(self.game.humanWins)
+        nrc = "Number of rounds the Computer won {}".format(self.game.aiWins)
+        text = [font.render(nrl, True, self.black), font.render(nrh, True, self.black),
+                font.render(nrc, True, self.black)]
+        for i in range(len(text)):
+            self.screen.blit(text[i], (0, 10*i))
+
+    def _pre_game_screen(self):
+        tr = self._center_text(self.startScreenText)
+
+        tn = self.font.render("Number of rounds = " + self.numberOfRounds, True, self.black)
+        tnr = self._center_text(tn, "Pre Game")
+        self.screen.blit(self.startScreenText, tr)
+        self.screen.blit(tn, tnr)
+
+    def start_playing(self):
+        while True:
+            self._check_events()
+            self.mouse = pygame.mouse.get_pos()
+            self.screen.fill(self.white)
+            if self.gameModeFlag:
+                if self.game.gameOn:
+                    self._draw_player_choices()
+                    self._draw_computer_choice()
+                    self._draw_round_winner()
+                    self._draw_game_statistics()
                 else:
-                    try:
-                        n = int(n)
-                        i = True
-                        r = Rock_Paper_Scissors(n)
-                    except:
-                        n = ""
-                        text1 = font.render("The input format were wrong please reenter the number of rounds", True, (0, 0, 0))
+                    self._draw_game_winner()
+                    self._draw_computer_choice()
+                    self._draw_game_statistics()
+            else:
+                self._pre_game_screen()
+            print(self.mouse)
+            pygame.display.flip()
 
-        else:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if 645 > mouse[1] > 460:
-                    if 200 > mouse[0] > 100:
-                        r.playAround("Rock")
-                    elif 400 > mouse[0] > 300:
-                        r.playAround("Paper")
-                    elif 600 > mouse[0] > 500:
-                        r.playAround("Scissors")
-    mouse = pygame.mouse.get_pos()
-    screen.fill(grey)
-    if i:
-        if r.gameOn:
-
-            screen.blit(rockSmall, (100, 460))
-            screen.blit(scissorsSmall, (500, 460))
-            screen.blit(paperSmall, (300, 460))
-            # screen.blit(paperBig, (200, 200))
-        else:
-            winner = font.render(r.getGameWinner(), True, (0, 0, 0))
-            wr = winner.get_rect()
-            wr.center = width / 2, height / 2
-            screen.blit(winner, wr)
-    else:
-        tn = font.render("Number of rounds: " + n, True, (0, 0, 0))
-        tnr = tn.get_rect()
-        tnr.center = width / 2, height / 2 + 100
-        tr = text1.get_rect()
-        tr.center = width / 2, height / 2
-        screen.blit(text1, tr)
-        screen.blit(tn, tnr)
-    pygame.display.flip()
