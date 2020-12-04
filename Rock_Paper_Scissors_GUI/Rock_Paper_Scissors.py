@@ -13,6 +13,8 @@ class Rock_Paper_Scissors:
         self.order = {"Rock": "Scissors", "Paper": "Rock", "Scissors": "Paper"}
         self.gameOn = True
         self.lastRoundWinner = ""
+        if self.rounds <= 0:
+            self.get_game_winner()
 
     def get_round_winner(self):
         if self.order[self.humanChoice] == self.aiChoice:
