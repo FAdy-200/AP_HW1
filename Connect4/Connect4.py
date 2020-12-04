@@ -3,15 +3,16 @@ import re
 
 class Connect4:
     def __init__(self):
-        self.gridMutable = list(("O" * 7 + ".") * 6)
+        self.gridMutable = list(("O" * 7 + ".") * 5+("O" * 7))
         self.grid = "".join(self.gridMutable)
         self.playerTurn = "R"
         self.gameOn = True
         self.rounds = 0
+        self.winner = None
 
     def __changePlayer(self):
         if self.playerTurn == "R":
-            self.playerTurn = "Y"
+            self.playerTurn = "B"
         else:
             self.playerTurn = "R"
 
@@ -28,7 +29,7 @@ class Connect4:
             print("Move out of range")
             return None
 
-    def make_move(self, move):
+    def makeMove(self, move):
         movePlace = self.__returnMovePlace(move)
         if movePlace is not None:
             self.gridMutable[movePlace] = self.playerTurn
@@ -50,24 +51,34 @@ class Connect4:
         c3 = re.search(p3, self.grid)
         c4 = re.search(p4, self.grid)
         if c1 or c2 or c3 or c4:
+            self.winner = self.playerTurn
             print(self.playerTurn, "Has won the game")
             self.gameOn = False
 
-    def printBoard(self):
+    def getBoard(self):
         gridUpside = self.grid[::-1]
         gridRightSide = gridUpside.split(".")
+        grid = []
         for i in gridRightSide:
-            print(i[::-1])
+            grid.append(i[::-1])
+        return grid
+
+    def printBoard(self):
+        grid = self.getBoard()
+        print()
+        for i in grid:
+            print(i)
 
 
 # s = Connect4()
-# print(s)
 # # s.printBoard()
 # import random
+#
 # for _ in range(int(input())):
 #     while s.gameOn:
-#         m = int(input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.playerTurn)))
+#         m = int(
+#             input("\nIt is {} turn please input the place where you want to drop your circle\n".format(s.playerTurn)))
 #         # m = random.randint(0, 6)
-#         s.make_move(m)
+#         s.makeMove(m)
 #         s.printBoard()
 #     s = Connect4()

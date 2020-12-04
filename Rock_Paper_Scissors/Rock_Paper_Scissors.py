@@ -12,7 +12,7 @@ class Rock_Paper_Scissors:
         self.order = {"Rock": "Scissors", "Paper": "Rock", "Scissors": "Paper"}
         self.gameOn = True
 
-    def __getRoundWinner(self):
+    def getRoundWinner(self):
         if self.order[self.humanChoice] == self.aiChoice:
             self.humanWins += 1
             self.roundsPlayed += 1
@@ -30,9 +30,12 @@ class Rock_Paper_Scissors:
         if abs(self.humanWins - self.aiWins) >= roundsLeft + 1:
             if self.humanWins > self.aiWins:
                 print("The human has won the game")
+                self.gameOn = False
+                return "Human"
             else:
                 print("The computer has won the game")
-            self.gameOn = False
+                self.gameOn = False
+                return "Computer"
         else:
             return
 
@@ -44,7 +47,7 @@ class Rock_Paper_Scissors:
     def playAround(self, choice):
         self.humanChoice = choice
         self.__getAiChoice()
-        w = self.__getRoundWinner()
+        w = self.getRoundWinner()
         if w != "Draw":
             print("Computer choose {}".format(self.aiChoice))
             print("{} has won this round".format(w))
@@ -53,10 +56,10 @@ class Rock_Paper_Scissors:
         self.getGameWinner()
 
 
-d = {0: "Scissors", 1: "Rock", 2: "Paper"}
-# n = int(input())
-n = 100000
-r = Rock_Paper_Scissors(n)
-while r.gameOn:
-    r.playAround(d[random.randint(0, 2)])
-    # r.playAround(d[int(input())])
+# d = {0: "Scissors", 1: "Rock", 2: "Paper"}
+# # n = int(input())
+# n = 100000
+# r = Rock_Paper_Scissors(n)
+# while r.gameOn:
+#     r.playAround(d[random.randint(0, 2)])
+#     # r.playAround(d[int(input())])
