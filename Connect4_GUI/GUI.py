@@ -30,19 +30,19 @@ class connect4GUI:
 
     def _set_user_input(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.mouse[0] < 100:
+            if self.mouse[0] < 95:
                 self.game.makeMove(0)
-            elif self.mouse[0] < 200:
+            elif self.mouse[0] < 190:
                 self.game.makeMove(1)
-            elif self.mouse[0] < 300:
+            elif self.mouse[0] < 285:
                 self.game.makeMove(2)
-            elif self.mouse[0] < 400:
+            elif self.mouse[0] < 380:
                 self.game.makeMove(3)
-            elif self.mouse[0] < 500:
+            elif self.mouse[0] < 475:
                 self.game.makeMove(4)
-            elif self.mouse[0] < 600:
+            elif self.mouse[0] < 570:
                 self.game.makeMove(5)
-            elif self.mouse[0] < 700:
+            elif self.mouse[0] < 665:
                 self.game.makeMove(6)
             print()
             for i in self.game.getBoard():
