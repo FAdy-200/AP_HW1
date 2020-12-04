@@ -79,7 +79,7 @@ class RockPaperScissorsGUI:
         self.screen.blit(self.paperSmall, (300, 460))
 
     def _draw_computer_choice(self):
-        aic = self.game.aiChoice
+        aic = self.game.computerChoice
         self.screen.blit(self.translatingDictionary[aic], (self.width / 2 - 100, 150))
         t = self.font.render("The computer choose:", True, self.black)
         tr = self._center_text(t, "Computer Choice")
@@ -114,7 +114,7 @@ class RockPaperScissorsGUI:
         font = pygame.font.Font('freesansbold.ttf', 10)
         nrl = "Number of rounds left : {}".format(self.game.roundsLeft)
         nrh = "Number of rounds Human won : {}".format(self.game.humanWins)
-        nrc = "Number of rounds the Computer won {}".format(self.game.aiWins)
+        nrc = "Number of rounds the Computer won {}".format(self.game.computerWins)
         text = [font.render(nrl, True, self.black), font.render(nrh, True, self.black),
                 font.render(nrc, True, self.black)]
         for i in range(len(text)):
