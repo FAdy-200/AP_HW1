@@ -30,7 +30,7 @@ class Rock_Paper_Scissors:
         self.roundsLeft -= 1
 
     def get_game_winner(self):
-        if abs(self.humanWins - self.aiWins) >= self.roundsLeft + 1:
+        if abs(self.humanWins - self.aiWins) >= self.roundsLeft + 1 >= 1:
             if self.humanWins > self.aiWins:
                 print("The human has won the game")
                 self.gameOn = False
@@ -39,7 +39,7 @@ class Rock_Paper_Scissors:
                 print("The computer has won the game")
                 self.gameOn = False
                 return "Computer"
-        elif self.roundsLeft == 0:
+        elif self.roundsLeft <= 0:
             print("The game was a draw no one won")
             self.gameOn = False
             return "Draw"
