@@ -10,13 +10,13 @@ class Connect4:
         self.rounds = 0
         self.winner = None
 
-    def __changePlayer(self):
+    def _changePlayer(self):
         if self.playerTurn == "R":
             self.playerTurn = "B"
         else:
             self.playerTurn = "R"
 
-    def __returnMovePlace(self, move):
+    def _returnMovePlace(self, move):
         if move > 7:
             print("Move out of range")
             return None
@@ -30,18 +30,18 @@ class Connect4:
             return None
 
     def makeMove(self, move):
-        movePlace = self.__returnMovePlace(move)
+        movePlace = self._returnMovePlace(move)
         if movePlace is not None:
             self.gridMutable[movePlace] = self.playerTurn
             self.grid = "".join(self.gridMutable)
             self.rounds += 1
-            self.__checkWinStatus()
-            self.__changePlayer()
+            self._checkWinStatus()
+            self._changePlayer()
         if self.rounds == 42:
             self.gameOn = False
             print("Draw no one won")
 
-    def __checkWinStatus(self):
+    def _checkWinStatus(self):
         p1 = self.playerTurn * 4
         p2 = self.playerTurn + ".{7}" + self.playerTurn + ".{7}" + self.playerTurn + ".{7}" + self.playerTurn
         p3 = self.playerTurn + ".{6}" + self.playerTurn + ".{6}" + self.playerTurn + ".{6}" + self.playerTurn
