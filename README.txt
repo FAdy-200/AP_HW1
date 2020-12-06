@@ -1,4 +1,4 @@
-Fadi Alahmad Aloamr 120180049
+Fadi Alahmad Alomar 120180049
 the submitted code is made by me and only me
 i spent a good amount on this assigment because i did a GUI for it and i made both games
 what take the most time was the GUI i was done with the backends in less than 2 hours but i took time because this is
